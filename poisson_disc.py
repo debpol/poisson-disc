@@ -86,6 +86,31 @@ class Grid:
                 self.active.remove(idx)
 
         return self.samples
+    
+    def poisson_int(self, seed, k=30):
+        """
+        generates a set of poisson disc samples
+        """
+        self.clear()
+
+        self.samples.append(seed)
+        self.active.append(0)
+        self.update(seed, 0)
+
+        while self.active:
+
+            idx = random.choice(self.active)
+            point = self.samples[idx]
+            new_point = self.make_points(k, point)
+
+            if new_point:
+                self.samples.append(tuple(map(int, new_point)))
+                self.active.append(len(self.samples)-1)
+                self.update(new_point, len(self.samples)-1)
+            else:
+                self.active.remove(idx)
+
+        return self.samples
 
     def make_points(self, k, point):
         """
